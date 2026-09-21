@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="color-scheme" content="light dark" />
+    <title>Spotify → Apple Music</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <header>
+      <img src="icons/icon48.png" width="24" height="24" alt="" />
+      <h1>Spotify → Apple Music</h1>
+      <label class="switch" title="Redirect Spotify links">
+        <input type="checkbox" id="enabled" />
+        <span class="track" aria-hidden="true"></span>
+        <span class="sr-only">Redirect Spotify links</span>
+      </label>
+    </header>
+
+    <section id="options">
+      <fieldset class="field">
+        <legend>Open links in</legend>
+        <div class="segmented">
+          <label><input type="radio" name="openIn" value="app" /><span>Music app</span></label>
+          <label><input type="radio" name="openIn" value="browser" /><span>Browser</span></label>
+        </div>
+      </fieldset>
+
+      <label class="check" id="close-tab-row">
+        <input type="checkbox" id="closeTab" />
+        <span>
+          Tidy up the tab afterwards
+          <small>Once Music has opened, close the leftover tab — or go back, if the link opened in the tab you were on.</small>
+        </span>
+      </label>
+
+      <label class="field row">
+        <span>Storefront</span>
+        <select id="country"></select>
+      </label>
+    </section>
+
+    <footer>
+      <a href="https://pillgates.dev/spotify-to-apple-music" target="_blank" rel="noopener">pillgates.dev</a>
+      <a href="https://pillgates.dev/spotify-to-apple-music#donate" target="_blank" rel="noopener" class="donate">Donate <span aria-hidden="true">♥</span></a>
+    </footer>
+
+    <script type="module" src="popup.js"></script>
+  </body>
+</html>

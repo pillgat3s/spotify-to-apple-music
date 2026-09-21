@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light dark" />
+    <title>Opening in Apple Music…</title>
+    <link rel="icon" href="icons/icon32.png" />
+    <link rel="stylesheet" href="redirect.css" />
+  </head>
+  <body>
+    <main class="card" id="card" data-state="loading">
+      <div class="cover">
+        <img id="artwork" alt="" hidden />
+        <div class="spinner" aria-hidden="true"></div>
+      </div>
+
+      <h1 id="title">Finding this on Apple Music…</h1>
+      <p id="subtitle" class="subtitle" hidden></p>
+      <p id="status" class="status" role="status"></p>
+
+      <div class="actions">
+        <button id="open-app" class="button primary" type="button" hidden>Open in Music</button>
+        <a id="open-web" class="button" hidden>Open in browser</a>
+        <button id="retry" class="button" type="button" hidden>Try again</button>
+        <button id="open-spotify" class="quiet" type="button" hidden>Open on Spotify instead</button>
+      </div>
+    </main>
+    <script type="module" src="redirect.js"></script>
+  </body>
+</html>

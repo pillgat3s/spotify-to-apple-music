@@ -1,0 +1,35 @@
+{
+  "manifest_version": 3,
+  "name": "Spotify → Apple Music",
+  "version": "1.0.0",
+  "description": "Opens Spotify track, album and artist links in Apple Music instead — in the Music app or in the browser.",
+  "homepage_url": "https://pillgates.dev/spotify-to-apple-music",
+  "minimum_chrome_version": "111",
+  "permissions": ["declarativeNetRequestWithHostAccess", "storage"],
+  "host_permissions": ["*://open.spotify.com/*", "https://itunes.apple.com/*", "https://music.apple.com/*"],
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "action": {
+    "default_title": "Spotify → Apple Music",
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "32": "icons/icon32.png",
+      "48": "icons/icon48.png"
+    }
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "web_accessible_resources": [
+    {
+      "resources": ["redirect.html"],
+      "matches": ["<all_urls>"]
+    }
+  ]
+}
