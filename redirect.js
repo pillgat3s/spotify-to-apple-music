@@ -1,3 +1,4 @@
+import { getPlatform } from './lib/platform.js';
 import { getSettings } from './lib/settings.js';
 import { parseSpotifyUrl, resolveCached, searchUrl, toAppUrl } from './lib/resolver.js';
 
@@ -13,6 +14,7 @@ const $ = (id) => document.getElementById(id);
 const spotify = parseSpotifyUrl(location.hash.slice(1));
 
 let settings;
+let platform;
 let handoff = null; // the app launch in flight: { at, blurredAt, confirmed }
 let tidied = false;
 
@@ -26,12 +28,18 @@ function render({ state, title, subtitle = '', status = '', artwork = null, targ
   if (artwork) $('artwork').src = artwork;
 
   // The Music app shows an empty page for search links, so a search only ever
-  // gets the browser button.
-  $('open-app').hidden = !target?.appUrl;
+  // gets the browser button — as does a system without the app.
+  const appUrls = target?.appUrls ?? [];
+  $('open-app').hidden = !appUrls.length;
   $('open-web').hidden = !target;
   if (target) {
-    $('open-app').onclick = () => launchApp(target.appUrl);
-    $('open-web').textContent = target.appUrl ? 'Open in browser' : 'Search Apple Music';
+    // A manual retry walks through the OS's schemes (see platform.js), starting
+    // with the one the automatic attempt used: that attempt most often stalls
+    // because Chrome wanted a click, not because the scheme was wrong.
+    let clicks = 0;
+    $('open-app').textContent = `Open in ${platform.appName}`;
+    $('open-app').onclick = () => launchApp(appUrls[clicks++ % appUrls.length]);
+    $('open-web').textContent = appUrls.length ? 'Open in browser' : 'Search Apple Music';
     $('open-web').href = target.webUrl;
   }
   $('retry').hidden = !retry;
@@ -41,12 +49,14 @@ function render({ state, title, subtitle = '', status = '', artwork = null, targ
 
 function launchApp(appUrl) {
   const attempt = (handoff = { at: performance.now(), blurredAt: null, confirmed: false });
-  $('status').textContent = 'Opening in Music…';
+  $('status').textContent = `Opening in ${platform.appName}…`;
   location.href = appUrl;
   setTimeout(() => {
-    if (handoff === attempt && !attempt.confirmed) {
-      $('status').textContent = 'Didn’t open? Click “Open in Music” — Chrome sometimes needs a click before it will launch an app.';
-    }
+    if (handoff !== attempt || attempt.confirmed) return;
+    const hint = `Didn’t open? Click “Open in ${platform.appName}” — Chrome sometimes needs a click before it will launch an app.`;
+    // Unlike on a Mac, the app is an optional install on Windows.
+    const noApp = ' If the Apple Music app isn’t installed, use “Open in browser” and pick Browser in the extension’s popup.';
+    $('status').textContent = platform.os === 'win' ? hint + noApp : hint;
   }, STALL_MS);
 }
 
@@ -112,7 +122,7 @@ async function main() {
     return;
   }
 
-  settings = await getSettings();
+  [settings, platform] = await Promise.all([getSettings(), getPlatform()]);
   render({ state: 'loading', title: 'Finding this on Apple Music…' });
 
   let resolved;
@@ -125,8 +135,8 @@ async function main() {
 
   const { match, query } = resolved;
   const target = match
-    ? { webUrl: match.url, appUrl: toAppUrl(match.url) }
-    : { webUrl: searchUrl(query, settings.country), appUrl: null };
+    ? { webUrl: match.url, appUrls: platform.schemes.map((scheme) => toAppUrl(match.url, scheme)) }
+    : { webUrl: searchUrl(query, settings.country), appUrls: [] };
 
   render(
     match
@@ -138,8 +148,8 @@ async function main() {
   const [navigation] = performance.getEntriesByType('navigation');
   if (navigation?.type === 'back_forward') return;
 
-  if (settings.openIn === 'browser' || !target.appUrl) location.replace(target.webUrl);
-  else whenVisible(() => launchApp(target.appUrl));
+  if (settings.openIn === 'browser' || !target.appUrls.length) location.replace(target.webUrl);
+  else whenVisible(() => launchApp(target.appUrls[0]));
 }
 
 $('retry').onclick = () => location.reload();

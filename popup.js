@@ -1,3 +1,4 @@
+import { getPlatform } from './lib/platform.js';
 import { STOREFRONTS, getSettings, saveSettings } from './lib/settings.js';
 
 const $ = (id) => document.getElementById(id);
@@ -14,7 +15,14 @@ const storefronts = STOREFRONTS.map((code) => ({ code, name: regionNames.of(code
 storefronts.sort((a, b) => a.name.localeCompare(b.name));
 $('country').append(...storefronts.map(({ code, name }) => new Option(name, code)));
 
-const settings = await getSettings();
+const [settings, platform] = await Promise.all([getSettings(), getPlatform()]);
+
+// "Music" on a Mac, "Apple Music" on Windows; nothing to hand off to elsewhere.
+$('app-label').textContent = `${platform.appName} app`;
+$('app-name').textContent = platform.appName;
+$('no-app').hidden = platform.hasApp;
+for (const radio of openInRadios) radio.disabled = !platform.hasApp;
+
 $('enabled').checked = settings.enabled;
 $('closeTab').checked = settings.closeTab;
 $('country').value = settings.country;

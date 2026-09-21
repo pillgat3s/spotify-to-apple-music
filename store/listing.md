@@ -24,7 +24,7 @@ Someone sends you a Spotify link. You use Apple Music. Click it anyway.
 
 Spotify → Apple Music catches Spotify track, album and artist links before they load and opens the same music in Apple Music — straight in the Music app, or on music.apple.com if you prefer the browser.
 
-• App or browser — one switch in the popup. In app mode the link goes to the Music app on your Mac or PC.
+• App or browser — one switch in the popup. In app mode the link goes to the Music app on your Mac, or the Apple Music app on your Windows PC.
 • The exact song, not a lucky guess — every candidate is checked on title, artist and track length, so you get the studio version you were sent rather than the live cut, the remix or a karaoke cover. Albums are checked on title, artist and track count; same-named artists are told apart by their top tracks.
 • No leftover tabs — once Music has opened, the tab closes itself. If the link opened in the tab you were already on, you are taken back to that page instead.
 • Honest when it can't find it — if nothing on Apple Music is close enough, it opens an Apple Music search for the artist and title instead of guessing.
@@ -34,7 +34,7 @@ Spotify → Apple Music catches Spotify track, album and artist links before the
 • Nothing to set up — no accounts, no API keys, no sign-in to Spotify or Apple.
 • Private — no analytics, no tracking, no server of ours. Settings and the match cache stay in your browser.
 
-The first time a link goes to the Music app, Chrome asks "Open Music?". Tick "Always allow" and it won't ask again.
+The first time a link goes to the app, Chrome asks "Open Music?" ("Open Apple Music?" on Windows). Tick "Always allow" and it won't ask again. On Windows the app mode needs Apple Music from the Microsoft Store (or iTunes); on Linux and ChromeOS, where there is no app, links open in the browser.
 
 Good to know: Chrome only lets an extension launch an app once until you next click or type somewhere in the browser. If you open several Spotify links in a row from another app, the second hand-off page asks for one click on "Open in Music".
 
@@ -76,7 +76,7 @@ No account or sign-in is needed.
 1. Open the popup and choose **Browser** under "Open links in".
 2. Visit `https://open.spotify.com/track/4cOdK2wGLETKBW3PvgPWqT`.
 3. The extension's hand-off page appears briefly, then the tab lands on the same song on `music.apple.com`.
-4. With **Music app** selected instead, the hand-off page asks Chrome to open `music://…` (needs the Apple Music app installed; Chrome shows its "Open Music?" prompt).
+4. With the app selected instead, the hand-off page asks Chrome to open the same item in the desktop app: `music://…` on macOS, `itms://…` on Windows (needs the Apple Music app installed; Chrome shows its "Open …?" prompt). On Linux/ChromeOS the app option is disabled and links go to the browser.
 5. A playlist link such as `https://open.spotify.com/playlist/37i9dQZF1DXcBWIGoYBM5M` is left alone by design.
 
 ## Assets (in this folder)

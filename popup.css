@@ -153,6 +153,21 @@ legend {
   color: var(--muted);
 }
 
+.segmented input:disabled,
+.segmented input:disabled + span {
+  cursor: default;
+}
+
+.segmented input:disabled:not(:checked) + span {
+  opacity: 0.45;
+}
+
+.note {
+  margin: 8px 0 0;
+  color: var(--muted);
+  font-size: 12px;
+}
+
 .segmented input:checked + span {
   background: var(--raised);
   color: var(--text);

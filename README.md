@@ -1,6 +1,6 @@
 # Spotify → Apple Music
 
-A Chrome extension that opens Spotify track, album and artist links in Apple Music instead — in the Music app (default) or in the browser. Works in Chrome, Brave and other Chromium browsers.
+A Chrome extension that opens Spotify track, album and artist links in Apple Music instead — in the app (Music on macOS, Apple Music on Windows) or in the browser. Works in Chrome, Brave and other Chromium browsers.
 
 ![Spotify links, opened in Apple Music](store/screenshot-1.png)
 
@@ -15,12 +15,12 @@ Not on the Chrome Web Store yet, so load it unpacked:
 3. Click **Load unpacked** and pick the folder.
 4. Pin the extension if you want quick access to the settings popup.
 
-The first time a link is handed to the Music app, Chrome asks **“Open Music?”**. Tick **“Always allow … to open links of this type in the associated app”** and it won't ask again.
+The first time a link is handed to the app, Chrome asks **“Open Music?”** (on Windows: **“Open Apple Music?”**). Tick **“Always allow … to open links of this type in the associated app”** and it won't ask again.
 
 ## Settings (toolbar popup)
 
 - **On/off switch** – when off, Spotify links behave normally.
-- **Open links in** – *Music app* or *Browser* (music.apple.com).
+- **Open links in** – the app (*Music* on macOS, *Apple Music* on Windows) or *Browser* (music.apple.com). Linux and ChromeOS have no Apple Music app, so links always open in the browser there.
 - **Tidy up the tab afterwards** – once Music has opened, the leftover tab closes itself; if the link opened in the tab you were already on, it goes back to that page instead.
 - **Storefront** – the Apple Music country used for lookups and links. It defaults to the region of Chrome's UI language (`en-US` → United States), which is not necessarily where your Apple Music account lives — set it to your account's country.
 
@@ -34,13 +34,14 @@ The first time a link is handed to the Music app, Chrome asks **“Open Music?�
 
   Matches are cached for 30 days.
 - No API keys, no accounts. (song.link/Odesli would have been the obvious shortcut, but its keyless public API has been shut down.)
-- The Music app gets the same link Apple's own "Open in Music" button produces: the web URL with `app=music`, under `music://`.
+- The app gets the same link Apple's own "Open in Music" button produces on that system: the web URL with `app=music`, under `music://` on macOS and `itms://` on Windows (`lib/platform.js`).
 - If there's no confident match, it opens an Apple Music search for the artist and title **in the browser** rather than guessing — in either mode, because the Mac Music app shows an empty page for search links.
 - **Open on Spotify instead** on the hand-off page lets that tab through to Spotify for as long as it stays open.
 
 ## Known limits
 
 - Chrome only launches an external app once per user interaction with the browser. If you click several Spotify links in a row from another app without touching Chrome in between, the second hand-off page will ask for a click on **Open in Music**.
+- On Windows the app is an optional install: you need [Apple Music from the Microsoft Store](https://apps.microsoft.com/detail/9PFHDD62MXS1) (or iTunes). Without it nothing answers the link, and the hand-off page points you to the browser instead. A manual retry there also tries `music://`, in case a PC only has a handler for that.
 - Matching is heuristic; regional exclusives or releases missing from Apple Music end up on the search page.
 - `spotify.link` short links work as long as they end up on a regular `open.spotify.com` page.
 
